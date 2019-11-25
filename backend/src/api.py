@@ -15,13 +15,20 @@ db_drop_and_create_all()
 
 ## ROUTES
 '''
-@TODO implement endpoint
     GET /drinks
         it should be a public endpoint
         it should contain only the drink.short() data representation
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route("/drinks")
+def get_drinks():
+    query = Drink.query.all()
+    drinks = [d.short() for d in query]
+    return jsonify({
+        "success": True,
+        "drinks": drinks
+    }), 200
 
 
 '''
