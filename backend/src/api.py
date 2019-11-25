@@ -13,7 +13,7 @@ CORS(app)
 
 db_drop_and_create_all()
 
-## ROUTES
+# ROUTES
 '''
     GET /drinks
         it should be a public endpoint
@@ -32,13 +32,21 @@ def get_drinks():
 
 
 '''
-@TODO implement endpoint
     GET /drinks-detail
         it should require the 'get:drinks-detail' permission
         it should contain the drink.long() data representation
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route("/drinks-detail")
+@requires_auth("get:drinks-detail")
+def get_drinks_detail(payload):
+    query = Drink.query.all()
+    drinks = [d.long() for d in query]
+    return jsonify({
+        "success": True,
+        "drinks": drinks
+    }), 200
 
 
 '''
@@ -77,17 +85,18 @@ def get_drinks():
 '''
 
 
-## Error Handling
+# Error Handling
 '''
 Example error handling for unprocessable entity
 '''
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
-                    "success": False, 
-                    "error": 422,
-                    "message": "unprocessable"
-                    }), 422
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
+
 
 '''
 @TODO implement error handlers using the @app.errorhandler(error) decorator
