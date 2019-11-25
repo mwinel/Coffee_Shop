@@ -11,7 +11,7 @@ app = Flask(__name__)
 setup_db(app)
 CORS(app)
 
-db_drop_and_create_all()
+# db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -71,7 +71,6 @@ def add_drinks(payload):
     }), 201
 
 '''
-@TODO implement endpoint
     PATCH /drinks/<id>
         where <id> is the existing model id
         it should respond with a 404 error if <id> is not found
@@ -81,6 +80,25 @@ def add_drinks(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
+@app.route("/drinks/<int:id>", methods=["PATCH"])
+@requires_auth("patch:drinks")
+def update_drinks(*args, **kwargs):
+    body = request.get_json()
+    drink = Drink.query.filter_by(id=kwargs.get("id")).one_or_none()
+    if not drink:
+        return jsonify({
+            "success": True,
+            "message": "Drink not found."
+        }), 404
+    drink.recipe = body.get("recipe", drink.recipe)
+    drink.title = body.get("title", drink.title)
+    if isinstance(drink.recipe, list):
+        drink.recipe = json.dumps(drink.recipe)
+    drink.update()
+    return jsonify({
+        "success": True,
+        "drink": drink.long()
+    }), 200
 
 
 '''
