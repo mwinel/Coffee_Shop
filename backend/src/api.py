@@ -50,7 +50,6 @@ def get_drinks_detail(payload):
 
 
 '''
-@TODO implement endpoint
     POST /drinks
         it should create a new row in the drinks table
         it should require the 'post:drinks' permission
@@ -58,7 +57,18 @@ def get_drinks_detail(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
-
+@app.route("/drinks", methods=["POST"])
+@requires_auth("post:drinks")
+def add_drinks(payload):
+    body = request.get_json()
+    drink = Drink()
+    drink.recipe = json.dumps(body.get("recipe"))
+    drink.title = body.get("title")
+    drink.insert()
+    return jsonify({
+        "success": True,
+        "drink": drink.long()
+    }), 201
 
 '''
 @TODO implement endpoint
