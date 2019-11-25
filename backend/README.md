@@ -147,12 +147,12 @@ postman 'Accept: application/json' http://127.0.0.1:5000/drinks
 - required permissions: post:drinks
 
 {
-	"title": "espresso",
-	"recipe": [{
+    "title": "espresso",
+    "recipe": [{
         "name": "espresso",
-        "color": "Black",
-        "parts": 3
-	}]
+	"color": "Black",
+	"parts": 3
+    }]
 }
 ```
 
@@ -184,12 +184,12 @@ postman 'Accept: application/json' http://127.0.0.1:5000/drinks/<int:id>
 - required permissions: patch:drinks
 
 {
-	"title": "espresso two",
-	"recipe": [{
+    "title": "espresso two",
+    "recipe": [{
         "name": "espresso",
         "color": "Black",
         "parts": 3
-	}]
+    }]
 }
 ```
 
